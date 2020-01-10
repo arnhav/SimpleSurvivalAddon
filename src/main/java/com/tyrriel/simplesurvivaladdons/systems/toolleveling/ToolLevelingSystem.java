@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ToolLevelingSystem {
 
     public ToolLevelingSystem(JavaPlugin plugin){
-
+        new ItemUtil(plugin);
     }
 
 }

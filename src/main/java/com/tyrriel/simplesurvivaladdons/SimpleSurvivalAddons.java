@@ -1,6 +1,7 @@
 package com.tyrriel.simplesurvivaladdons;
 
 import com.tyrriel.simplesurvivaladdons.systems.fasttravel.FastTravelSystem;
+import com.tyrriel.simplesurvivaladdons.systems.sexycrafting.SexyCraftingSystem;
 import com.tyrriel.simplesurvivaladdons.systems.toolleveling.ToolLevelingSystem;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
@@ -24,6 +25,7 @@ public final class SimpleSurvivalAddons extends JavaPlugin {
 
         new ToolLevelingSystem(this);
         new FastTravelSystem(this);
+        new SexyCraftingSystem(this);
     }
 
     @Override
