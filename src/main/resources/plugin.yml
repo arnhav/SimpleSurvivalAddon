@@ -1,0 +1,6 @@
+name: SimpleSurvivalAddons
+version: ${project.version}
+main: com.tyrriel.simplesurvivaladdons.SimpleSurvivalAddons
+api-version: 1.13
+authors: [Tyrriel, _KaZr]
+description: A custom survival plugin
