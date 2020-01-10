@@ -2,6 +2,7 @@ package com.tyrriel.simplesurvivaladdons.systems.toolleveling;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,12 +25,16 @@ public class LevelingListener implements Listener {
 
         ItemStack itemStack = event.getRecipe().getResult();
         String type = itemStack.getType().toString();
-
-        if (!type.contains("SWORD") || !type.contains("AXE") || !type.contains("SHOVEL") ||
-                !type.contains("FISHING") || !type.contains("BOW") || !type.contains("TRIDENT"))
+        if (!(type.contains("SWORD") || type.contains("AXE") || type.contains("SHOVEL") ||
+                type.contains("FISHING") || type.contains("BOW") || type.contains("TRIDENT")))
             return;
 
-        Bukkit.getScheduler().runTaskLater(plugin, ()-> event.getInventory().setResult(ItemUtil.createTool(itemStack)),1);
+        Bukkit.getScheduler().runTaskLater(plugin, ()->{
+            event.getInventory().setResult(ItemUtil.createTool(itemStack));
+            for (HumanEntity humanEntity : event.getViewers()){
+                ((Player)humanEntity).updateInventory();
+            }
+        },1);
     }
 
     @EventHandler
@@ -41,11 +46,11 @@ public class LevelingListener implements Listener {
         if (!ItemUtil.isTool(itemStack)) return;
 
         if (block.getType().toString().contains("LOG")){
-            ItemUtil.increaseToolExp(itemStack, 2);
+            ItemUtil.increaseToolExp(player, itemStack, 2);
         }
 
         if (block.getType().toString().contains("ORE")){
-            ItemUtil.increaseToolExp(itemStack, 5);
+            ItemUtil.increaseToolExp(player, itemStack, 5);
         }
     }
 

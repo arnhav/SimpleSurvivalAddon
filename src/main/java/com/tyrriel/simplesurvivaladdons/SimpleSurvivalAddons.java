@@ -18,10 +18,10 @@ public final class SimpleSurvivalAddons extends JavaPlugin {
         console = getServer().getConsoleSender();
 
         // Enable message
-        console.sendMessage(ChatColor.GOLD + "[" + this.getName() + "] " + ChatColor.AQUA + "+===================+");
-        console.sendMessage(ChatColor.GOLD + "[" + this.getName() + "] " + ChatColor.AQUA + "Plugin has been enabled!");
-        console.sendMessage(ChatColor.GOLD + "[" + this.getName() + "] " + ChatColor.AQUA + "Version: " + this.getDescription().getVersion());
-        console.sendMessage(ChatColor.GOLD + "[" + this.getName() + "] " + ChatColor.AQUA + "+===================+");
+        console.sendMessage(ChatColor.LIGHT_PURPLE + "[" + this.getName() + "] " + ChatColor.GREEN + "+===================+");
+        console.sendMessage(ChatColor.LIGHT_PURPLE + "[" + this.getName() + "] " + ChatColor.GREEN + "Plugin has been enabled!");
+        console.sendMessage(ChatColor.LIGHT_PURPLE + "[" + this.getName() + "] " + ChatColor.GREEN + "Version: " + this.getDescription().getVersion());
+        console.sendMessage(ChatColor.LIGHT_PURPLE + "[" + this.getName() + "] " + ChatColor.GREEN + "+===================+");
 
         new ToolLevelingSystem(this);
         new FastTravelSystem(this);
@@ -33,8 +33,8 @@ public final class SimpleSurvivalAddons extends JavaPlugin {
         // Plugin shutdown logic
 
         // Disable message
-        console.sendMessage(ChatColor.GOLD + "[" + this.getName() + "] " + ChatColor.AQUA + "+===================+");
-        console.sendMessage(ChatColor.AQUA + "[" + this.getName() + "] " + ChatColor.AQUA + "Plugin has been disabled!");
-        console.sendMessage(ChatColor.GOLD + "[" + this.getName() + "] " + ChatColor.AQUA + "+===================+");
+        console.sendMessage(ChatColor.LIGHT_PURPLE + "[" + this.getName() + "] " + ChatColor.GREEN + "+===================+");
+        console.sendMessage(ChatColor.LIGHT_PURPLE + "[" + this.getName() + "] " + ChatColor.GREEN + "Plugin has been disabled!");
+        console.sendMessage(ChatColor.LIGHT_PURPLE + "[" + this.getName() + "] " + ChatColor.GREEN + "+===================+");
     }
 }

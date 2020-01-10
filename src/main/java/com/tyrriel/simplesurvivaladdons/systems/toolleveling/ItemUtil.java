@@ -2,6 +2,8 @@ package com.tyrriel.simplesurvivaladdons.systems.toolleveling;
 
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -22,6 +24,7 @@ public class ItemUtil {
 
     public static boolean isTool(ItemStack itemStack){
         ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) return false;
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
 
         return pdc.has(level, PersistentDataType.INTEGER);
@@ -39,35 +42,40 @@ public class ItemUtil {
         return pdc.get(exp, PersistentDataType.INTEGER);
     }
 
+    public static int getExpRequired(int level){
+        return ((int)Math.pow(5, level) + 25);
+    }
+
     public static ItemStack createTool(ItemStack itemStack){
         ItemMeta itemMeta = itemStack.getItemMeta();
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
 
-        pdc.set(level, PersistentDataType.INTEGER, 0);
+        pdc.set(level, PersistentDataType.INTEGER, 1);
         pdc.set(exp, PersistentDataType.INTEGER, 0);
 
         itemMeta.setLore(Arrays.asList(
                 " ",
                 ChatColor.AQUA + "Level: " + ChatColor.WHITE + 1,
-                ChatColor.AQUA + "Experience: " + ChatColor.WHITE + "0/" + Math.pow(25, 1),
-                " "
+                ChatColor.AQUA + "Experience: " + ChatColor.WHITE + "0/" + getExpRequired(1)
         ));
 
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
 
-    public static ItemStack increaseToolExp(ItemStack itemStack, int amount){
+    public static ItemStack increaseToolExp(Player player, ItemStack itemStack, int amount){
         ItemMeta itemMeta = itemStack.getItemMeta();
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
 
         int l = getToolLevel(itemStack);
         int e = getToolExp(itemStack);
 
-        if (e + amount >= Math.pow(25, l)){
-            e = (int)Math.pow(25, l) - e;
-            increaseToolLevel(itemStack);
+        if (e + amount >= getExpRequired(l)){
+            e = getExpRequired(l) - e;
+            increaseToolLevel(player, itemStack);
             l = getToolLevel(itemStack);
+        } else {
+            e = e + amount;
         }
 
         pdc.set(ItemUtil.level, PersistentDataType.INTEGER, l);
@@ -76,15 +84,14 @@ public class ItemUtil {
         itemMeta.setLore(Arrays.asList(
                 " ",
                 ChatColor.AQUA + "Level: " + ChatColor.WHITE + l,
-                ChatColor.AQUA + "Experience: " + ChatColor.WHITE + e + "/" + Math.pow(25, l),
-                " "
+                ChatColor.AQUA + "Experience: " + ChatColor.WHITE + e + "/" + getExpRequired(l)
         ));
 
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }
 
-    public static ItemStack increaseToolLevel(ItemStack itemStack){
+    public static ItemStack increaseToolLevel(Player player, ItemStack itemStack){
         ItemMeta itemMeta = itemStack.getItemMeta();
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
 
@@ -96,11 +103,11 @@ public class ItemUtil {
         itemMeta.setLore(Arrays.asList(
                 " ",
                 ChatColor.AQUA + "Level: " + ChatColor.WHITE + l,
-                ChatColor.AQUA + "Experience: " + ChatColor.WHITE + "0/" + Math.pow(25, l),
-                " "
+                ChatColor.AQUA + "Experience: " + ChatColor.WHITE + "0/" + getExpRequired(l)
         ));
 
         itemStack.setItemMeta(itemMeta);
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 3.0f, 0.5f);
         return itemStack;
     }
 
