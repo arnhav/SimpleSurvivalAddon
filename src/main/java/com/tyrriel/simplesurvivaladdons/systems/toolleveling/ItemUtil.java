@@ -20,12 +20,31 @@ public class ItemUtil {
         exp = new NamespacedKey(plugin, "Exp");
     }
 
+    public static boolean isTool(ItemStack itemStack){
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+
+        return pdc.has(level, PersistentDataType.INTEGER);
+    }
+
+    public static int getToolLevel(ItemStack itemStack){
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+        return pdc.get(level, PersistentDataType.INTEGER);
+    }
+
+    public static int getToolExp(ItemStack itemStack){
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+        return pdc.get(exp, PersistentDataType.INTEGER);
+    }
+
     public static ItemStack createTool(ItemStack itemStack){
         ItemMeta itemMeta = itemStack.getItemMeta();
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
 
-        pdc.set(ItemUtil.level, PersistentDataType.INTEGER, 0);
-        pdc.set(ItemUtil.exp, PersistentDataType.INTEGER, 0);
+        pdc.set(level, PersistentDataType.INTEGER, 0);
+        pdc.set(exp, PersistentDataType.INTEGER, 0);
 
         itemMeta.setLore(Arrays.asList(
                 " ",
@@ -42,21 +61,22 @@ public class ItemUtil {
         ItemMeta itemMeta = itemStack.getItemMeta();
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
 
-        int level = pdc.get(ItemUtil.level, PersistentDataType.INTEGER);
-        int exp = pdc.get(ItemUtil.exp, PersistentDataType.INTEGER);
+        int l = getToolLevel(itemStack);
+        int e = getToolExp(itemStack);
 
-        if (exp + amount >= Math.pow(25, level)){
-            exp = (int)Math.pow(25, level) - exp;
+        if (e + amount >= Math.pow(25, l)){
+            e = (int)Math.pow(25, l) - e;
             increaseToolLevel(itemStack);
+            l = getToolLevel(itemStack);
         }
 
-        pdc.set(ItemUtil.level, PersistentDataType.INTEGER, level);
-        pdc.set(ItemUtil.exp, PersistentDataType.INTEGER, exp);
+        pdc.set(ItemUtil.level, PersistentDataType.INTEGER, l);
+        pdc.set(ItemUtil.exp, PersistentDataType.INTEGER, e);
 
         itemMeta.setLore(Arrays.asList(
                 " ",
-                ChatColor.AQUA + "Level: " + ChatColor.WHITE + level,
-                ChatColor.AQUA + "Experience: " + ChatColor.WHITE + exp + "/" + Math.pow(25, level),
+                ChatColor.AQUA + "Level: " + ChatColor.WHITE + l,
+                ChatColor.AQUA + "Experience: " + ChatColor.WHITE + e + "/" + Math.pow(25, l),
                 " "
         ));
 
@@ -68,15 +88,15 @@ public class ItemUtil {
         ItemMeta itemMeta = itemStack.getItemMeta();
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
 
-        int level = pdc.get(ItemUtil.level, PersistentDataType.INTEGER) + 1;
+        int l = getToolLevel(itemStack) + 1;
 
-        pdc.set(ItemUtil.level, PersistentDataType.INTEGER, level);
+        pdc.set(ItemUtil.level, PersistentDataType.INTEGER, l);
         pdc.set(ItemUtil.exp, PersistentDataType.INTEGER, 0);
 
         itemMeta.setLore(Arrays.asList(
                 " ",
-                ChatColor.AQUA + "Level: " + ChatColor.WHITE + level,
-                ChatColor.AQUA + "Experience: " + ChatColor.WHITE + "0/" + Math.pow(25, level),
+                ChatColor.AQUA + "Level: " + ChatColor.WHITE + l,
+                ChatColor.AQUA + "Experience: " + ChatColor.WHITE + "0/" + Math.pow(25, l),
                 " "
         ));
 
