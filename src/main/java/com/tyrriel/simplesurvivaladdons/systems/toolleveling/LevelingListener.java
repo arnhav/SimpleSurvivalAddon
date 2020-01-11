@@ -11,12 +11,19 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Random;
+
 public class LevelingListener implements Listener {
 
     JavaPlugin plugin;
+    Random rand = new Random();
 
     public LevelingListener(JavaPlugin plugin){
         this.plugin = plugin;
+    }
+
+    private boolean prob(double percent) {
+        return rand.nextDouble() * 100 < percent;
     }
 
     @EventHandler
@@ -45,12 +52,55 @@ public class LevelingListener implements Listener {
 
         if (!ItemUtil.isTool(itemStack)) return;
 
-        if (block.getType().toString().contains("LOG")){
-            ItemUtil.increaseToolExp(player, itemStack, 2);
-        }
+        switch (block.getType()){
+            case COAL_ORE:
+                ItemUtil.increaseToolExp(player, itemStack, 1);
+                break;
+            case IRON_ORE:
+                ItemUtil.increaseToolExp(player, itemStack, 2);
+                break;
+            case NETHER_QUARTZ_ORE:
+                ItemUtil.increaseToolExp(player, itemStack, 2);
+                break;
+            case GOLD_ORE:
+                ItemUtil.increaseToolExp(player, itemStack, 3);
+                break;
+            case DIAMOND_ORE:
+                ItemUtil.increaseToolExp(player, itemStack, 5);
+                break;
+            case EMERALD_ORE:
+                ItemUtil.increaseToolExp(player, itemStack, 10);
+                break;
+            case OAK_LOG:
+                ItemUtil.increaseToolExp(player, itemStack, 1);
+                break;
+            case BIRCH_LOG:
+                ItemUtil.increaseToolExp(player, itemStack, 1);
+                break;
+            case DARK_OAK_LOG:
+                ItemUtil.increaseToolExp(player, itemStack, 1);
+                break;
+            case JUNGLE_LOG:
+                ItemUtil.increaseToolExp(player, itemStack, 1);
+                break;
+            case SPRUCE_LOG:
+                ItemUtil.increaseToolExp(player, itemStack, 1);
+                break;
+            case ACACIA_LOG:
+                ItemUtil.increaseToolExp(player, itemStack, 3);
+                break;
+            case GRASS_BLOCK:
+                ItemUtil.increaseToolExp(player, itemStack, 1);
+                break;
+            case CLAY:
+                ItemUtil.increaseToolExp(player, itemStack, 1);
+                break;
 
-        if (block.getType().toString().contains("ORE")){
-            ItemUtil.increaseToolExp(player, itemStack, 5);
+        }
+        if (prob(ItemUtil.getToolLevel(itemStack) * 5)){
+            for (ItemStack temp : block.getDrops(itemStack)) {
+                block.getWorld().dropItemNaturally(block.getLocation(), temp);
+            }
         }
     }
 
